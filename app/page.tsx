@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 
 export default function BrilliantTowerLanding() {
   const [open, setOpen] = useState(false);
+  const [heroOpen, setHeroOpen] = useState(false);
   // Form state
   const [form, setForm] = useState({
     company: "",
@@ -59,10 +60,7 @@ export default function BrilliantTowerLanding() {
       <nav className="fixed top-0 w-full z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">T</span>
-            </div>
-            <span className="font-bold text-xl text-primary">TUNGA NAWE</span>
+              <img src="/log.jpg" alt="Tunga Nawe Logo" className="w-20 h-20 rounded-lg" />
           </div>
           <div className="hidden md:flex items-center space-x-6">
             <a href="#about" className="text-foreground hover:text-primary transition-colors">
@@ -171,7 +169,6 @@ export default function BrilliantTowerLanding() {
           <div className="absolute inset-0 bg-primary/20"></div>
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-5xl">
-          <Badge className="mb-4 bg-accent text-accent-foreground">Book Your Private Presentation Now</Badge>
           <h1 className="text-3xl md:text-5xl font-bold mb-4 text-balance">
             Kigali's First World-Class Commercial Building
           </h1>
@@ -184,9 +181,87 @@ export default function BrilliantTowerLanding() {
           </p>
           <p className="text-lg mb-8 text-pretty opacity-90 font-medium">Available Now for Pre-Leasing.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8">
+            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8" onClick={() => setHeroOpen(true)}>
               Book a Private Tour
             </Button>
+            <Dialog open={heroOpen} onOpenChange={setHeroOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Book Private Tour</DialogTitle>
+                  <DialogDescription>
+                    Fill in your details to request a private tour of Brilliant Tower.
+                  </DialogDescription>
+                </DialogHeader>
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Company Name</label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={form.company}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter your company name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Contact Person</label>
+                    <input
+                      type="text"
+                      name="contact"
+                      value={form.contact}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter contact person name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Space Requirements (sqm)</label>
+                    <input
+                      type="text"
+                      name="space"
+                      value={form.space}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="e.g., 200-500 sqm"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
+                    {loading ? "Sending..." : "Request Private Tour"}
+                  </Button>
+                </form>
+                <DialogClose asChild>
+                  <Button variant="outline" className="w-full mt-2">Close</Button>
+                </DialogClose>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </section>
