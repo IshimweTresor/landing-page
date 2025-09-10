@@ -1,11 +1,61 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+"use client";
+
+import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
 export default function BrilliantTowerLanding() {
+  const [open, setOpen] = useState(false);
+  // Form state
+  const [form, setForm] = useState({
+    company: "",
+    contact: "",
+    email: "",
+    phone: "",
+    space: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  // Handle input change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/send-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: form.phone,
+          space: form.space,
+          company: form.company,
+          contact: form.contact,
+          email: form.email
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast({ title: "Email sent!", description: "Your request has been sent successfully." });
+        setForm({ company: "", contact: "", email: "", phone: "", space: "" });
+      } else {
+        toast({ title: "Error", description: "Failed to send email." });
+      }
+    } catch {
+      toast({ title: "Error", description: "Failed to send email." });
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -28,7 +78,85 @@ export default function BrilliantTowerLanding() {
               Contact
             </a>
           </div>
-          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Book Private Tour</Button>
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" onClick={() => setOpen(true)}>Book Private Tour</Button>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Book Private Tour</DialogTitle>
+                  <DialogDescription>
+                    Fill in your details to request a private tour of Brilliant Tower.
+                  </DialogDescription>
+                </DialogHeader>
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Company Name</label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={form.company}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter your company name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Contact Person</label>
+                    <input
+                      type="text"
+                      name="contact"
+                      value={form.contact}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter contact person name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Space Requirements (sqm)</label>
+                    <input
+                      type="text"
+                      name="space"
+                      value={form.space}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="e.g., 200-500 sqm"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
+                    {loading ? "Sending..." : "Request Private Tour"}
+                  </Button>
+                </form>
+                <DialogClose asChild>
+                  <Button variant="outline" className="w-full mt-2">Close</Button>
+                </DialogClose>
+              </DialogContent>
+            </Dialog>
         </div>
       </nav>
 
@@ -325,51 +453,71 @@ export default function BrilliantTowerLanding() {
               <Card>
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-semibold mb-6">Book Your Private Presentation</h3>
-                  <div className="space-y-4">
+                  <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>
                       <label className="block text-sm font-medium mb-2">Company Name</label>
                       <input
                         type="text"
+                        name="company"
+                        value={form.company}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
                         placeholder="Enter your company name"
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Contact Person</label>
                       <input
                         type="text"
+                        name="contact"
+                        value={form.contact}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
                         placeholder="Enter contact person name"
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Email</label>
                       <input
                         type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
                         placeholder="Enter your email"
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Phone</label>
                       <input
                         type="tel"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
                         placeholder="Enter your phone number"
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Space Requirements (sqm)</label>
                       <input
                         type="text"
+                        name="space"
+                        value={form.space}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
                         placeholder="e.g., 200-500 sqm"
+                        required
                       />
                     </div>
-                    <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      Request Private Presentation
+                    <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
+                      {loading ? "Sending..." : "Request Private Presentation"}
                     </Button>
-                  </div>
+                  </form>
                 </CardContent>
               </Card>
             </div>
