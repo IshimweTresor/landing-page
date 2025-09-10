@@ -1,4 +1,5 @@
 "use client";
+"use client";
 
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -8,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
 export default function BrilliantTowerLanding() {
+  // ...existing code...
   const [open, setOpen] = useState(false);
   const [heroOpen, setHeroOpen] = useState(false);
   // Form state
@@ -57,10 +59,24 @@ export default function BrilliantTowerLanding() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* WhatsApp Floating Icon Button */}
+      <a
+        href="https://wa.me/250789234932"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: "fixed",
+          bottom: "32px",
+          right: "32px",
+          zIndex: 1000
+        }}
+      >
+        <img src="/images/whatsapp-icon.png" alt="WhatsApp" style={{ width: "64px", height: "64px" }} />
+      </a>
       <nav className="fixed top-0 w-full z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-              <img src="/log.jpg" alt="Tunga Nawe Logo" className="w-20 h-20 rounded-lg" />
+              <img src="/log.jpg" alt="Tunga Nawe Logo" className="w-20 h-15 rounded-lg" />
           </div>
           <div className="hidden md:flex items-center space-x-6">
             <a href="#about" className="text-foreground hover:text-primary transition-colors">
@@ -618,6 +634,12 @@ export default function BrilliantTowerLanding() {
             <div className="space-y-1 text-primary-foreground/80">
               <div>Phone: +250789234932 / +250783331250</div>
               <div>Email: Tunganawe@gmail.com</div>
+            </div>
+            <div className="mt-6 flex justify-center">
+              <a href="https://wa.me/250789234932" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-green-600 hover:text-green-800">
+                <img src="/images/whatsapp-icon.png" alt="WhatsApp" className="w-8 h-8" />
+                <span>Contact us on WhatsApp</span>
+              </a>
             </div>
           </div>
           <div className="border-t border-primary-foreground/20 pt-8 text-center text-primary-foreground/60">
