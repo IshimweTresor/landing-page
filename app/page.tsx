@@ -436,7 +436,7 @@ export default function BrilliantTowerLanding() {
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <Card className="p-8">
                 <div className="text-3xl font-bold text-primary mb-4">
-                  USD 26/sqm/month
+                  Total Floor Area 14,886square meters
                 </div>
                 <h3 className="text-xl font-semibold mb-4">Rent</h3>
                 <p className="text-muted-foreground">
